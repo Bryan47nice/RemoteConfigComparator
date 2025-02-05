@@ -1,0 +1,2 @@
+# RemoteConfigComparator
+用來快速比較RemoteConfig的差異
