@@ -1,0 +1,421 @@
+{
+  "version": {
+    "versionNumber": "47",
+    "updateTime": "2025-01-23T09:01:53.413494Z",
+    "updateUser": {
+      "email": "bryan_jhuang@cmoney.com.tw"
+    },
+    "updateOrigin": "CONSOLE",
+    "updateType": "INCREMENTAL_UPDATE"
+  },
+  "parameterGroups": {
+    "serial 自動開通序號": {
+      "description": "給免費用戶產品體驗序號，會自動讓有登入理財寶的免費帳號開通",
+      "parameters": {
+        "serialKey": {
+          "defaultValue": {
+            "value": ""
+          },
+          "description": "序號key",
+          "valueType": "STRING"
+        },
+        "serialStatus": {
+          "defaultValue": {
+            "value": "0"
+          },
+          "description": "序號狀態: 0 關閉、1 開啟",
+          "valueType": "STRING"
+        }
+      }
+    },
+    "個股切換試用機制 (看個股的次數)": {
+      "parameters": {
+        "sStockTrialButtonControl": {
+          "defaultValue": {
+            "value": "1"
+          },
+          "description": "點擊彈窗右按紐後的行為，1：連結內購頁，2：連結URL(啟動sStockTrialButtonUpLink)",
+          "valueType": "STRING"
+        },
+        "sStockTrialButtonDown": {
+          "defaultValue": {
+            "value": "考慮一下"
+          },
+          "description": "彈窗左按紐 (用於關閉彈窗)",
+          "valueType": "STRING"
+        },
+        "sStockTrialButtonUp": {
+          "defaultValue": {
+            "value": "立即升級"
+          },
+          "description": "彈窗右按紐 (常用於促使下一步)",
+          "valueType": "STRING"
+        },
+        "sStockTrialButtonUpLink": {
+          "defaultValue": {
+            "value": ""
+          },
+          "description": "ButtonControl選2時會跳轉的連結",
+          "valueType": "STRING"
+        },        
+        "sStockTrialStatus": {
+          "defaultValue": {
+            "value": ""
+          },
+          "description": "個股切換發動時機： 0 不啟用金鑰+關閉彈窗 /  1 啟用金鑰+觸發開起彈窗+觸發後重新計算次數 / 2 啟用金鑰+觸發開啟彈窗+觸發後相同動作皆觸發彈窗+隔天 重新計次數",
+          "valueType": "STRING"
+        },
+        "sStockTrialText": {
+          "defaultValue": {
+            "value": "升級專業版即可無限使用"
+          },
+          "description": "彈窗文字",
+          "valueType": "STRING"
+        },
+        "sStockTrialTitle": {
+          "defaultValue": {
+            "value": "已達個股每日體驗次數上限"
+          },
+          "description": "彈窗標題",
+          "valueType": "STRING"
+        }
+      }
+    },
+    "用戶權限": {
+      "parameters": {
+        "moreButtonAuthorityStatus": {
+          "defaultValue": {
+            "value": "0"
+          },
+          "description": "會員頁是否顯示升級專業版按鈕與權限：0(顯示), 1(隱藏)",
+          "valueType": "STRING"
+        }
+      }
+    },
+    "行銷彈窗": {
+      "parameters": {
+        "AdNotifyInfo": {
+          "defaultValue": {
+            "value": "[\n  { \n   \"id\": 0,\n   \"userType\": 1, \n   \"imageUrl\":\"https://memeprod.sgp1.digitaloceanspaces.com/user-wtf/1664796105558.jpg\",\n   \"webUrl\":\"\",\n   \"buttonLeft\": {\"title\": \"我明白了2\",\"url\": \"\"},\n   \"buttonRight\": {\"title\": \"立即升級2\",\"url\": \"\"},\n   \"openType\": 2,\n   \"startTime\": \"2025/1/24 00:00\",\n   \"endTime\": \"2025/1/24 09:30\"\n  },\n  { \n    \"id\": 1,\n    \"userType\": 1, \n    \"imageUrl\": \"https://cf.shopee.tw/file/423d7783def285e44a156b93a37a9813\",\n    \"webUrl\": \" \",\n    \"buttonLeft\": {\"title\": \"丟\",\"url\": \"\"},\n    \"buttonRight\": {\"title\": \"大力地丟\",\"url\": \" \"},\n    \"openType\": 2,\n    \"startTime\": \"2025/1/24 09:30\",\n    \"endTime\": \"\"\n  }\n]"
+          },          
+          "description": "文件連結： https://reurl.cc/aamKk3",
+          "valueType": "STRING"
+        }
+      }
+    },    
+    "內購按鈕": {
+      "parameters": {
+        "iapButton": {
+          "defaultValue": {
+            "value": "即刻購買"
+          },
+          "description": "內購按鈕上方的文字  (在多方案的情況下，不同方案都是同一組)",
+          "valueType": "STRING"
+        },
+        "iapButtonControl": {
+          "defaultValue": {
+            "value": "1"
+          },
+          "description": "內購按紐跳轉/ 1.內購 、2.導向網頁網址(啟動button URL) ",
+          "valueType": "NUMBER"
+        },    
+        "iapCarouselList": {
+          "defaultValue": {
+            "value": "{\"carouselList\":[\"https://i.imgur.com/GP53XFI.png\",\"https://i.imgur.com/MX7QRqO.png\"]}"
+          },
+          "description": "圖片輪播圖，優先取url，再取壓版圖檔",
+          "valueType": "JSON"
+        },
+        "iapPlanInfoList": {
+          "defaultValue": {
+            "value": "[{\"iosProductID\":\"CMoney.ProductionLine.PagesAssemble.OneMonth.IOS\",\"androidProductID\":\"cmoney.page.onemonth.android\",\"iapButtonUrl\":\"https://test.cmoney.tw/app/ItemContent.aspx?id=4906\",\"iapTextLeftUp\":\"\",\"iapTextUp\":\"早鳥超值月優惠】\",\"iapTextDown\":\"$49 USD/月 \"},{\"iosProductID\":\"CMoney.ProductionLine.PagesAssemble.OneMonth.IOS\",\"androidProductID\":\"cmoney.page.onemonth.android\",\"iapButtonUrl\":\"https://test.cmoney.tw/app/ItemContent.aspx?id=4906\",\"iapTextLeftUp\":\"\",\"iapTextUp\":\"早鳥必買季優惠】\",\"iapTextDown\":\"$135 USD/季 \"},{\"iosProductID\":\"CMoney.ProductionLine.PagesAssemble.OneMonth.IOS\",\"androidProductID\":\"cmoney.page.onemonth.android\",\"iapButtonUrl\":\"https://test.cmoney.tw/app/ItemContent.aspx?id=4906\",\"iapTextLeftUp\":\"\",\"iapTextUp\":\"早鳥必買季優惠】\",\"iapTextDown\":\"$500 USD/年 \"}]"
+          },
+          "description": "內購多方案內容",
+          "valueType": "JSON"
+        }
+      }
+    },  
+    "AppStatus": {
+      "description": "用來控制此App的狀態，例如控制是否讓用戶能夠使用等等",
+      "parameters": {
+        "appStatus": {
+          "defaultValue": {
+            "value": "1"
+          },
+          "description": "2適用於審查，1為可以使用，0為系統維護中，-1為需要更新，-2為建議更新",
+          "valueType": "STRING"
+        },
+        "statusAnnouncement": {
+          "defaultValue": {
+            "value": ""
+          },
+          "description": "常用於appStatus為0、-1、-2的時候，如果有填值，會在開啟App時跳彈窗顯示其內容",
+          "valueType": "STRING"
+        }
+      }
+    },
+    "策略觸發試用機制 (空方)": {
+      "parameters": {
+        "sStrategyTrialTitle": {
+          "defaultValue": {
+            "value": "已達每日體驗次數上限"
+          },
+          "description": "彈窗標題",
+          "valueType": "STRING"
+        },
+        "sStrategyTrialText": {
+          "defaultValue": {
+            "value": "升級專業版即可無限使用"
+          },
+          "description": "彈窗文字",
+          "valueType": "STRING"
+        },
+        "sStrategyTrialStatus": {
+          "defaultValue": {
+            "value": "0"
+          },
+          "description": "金鑰發動時機： 0 不啟用金鑰+關閉彈窗 1 啟用金鑰+觸發開起彈窗+觸發後重新計算次數 2 啟用金鑰+觸發開啟彈窗+觸發後相同動作皆觸發彈窗+隔天 重新計次數",
+          "valueType": "STRING"
+        },        
+        "sStrategyTrialButtonUpLink": {
+          "defaultValue": {
+            "value": ""
+          },
+          "description": "ButtonControl選2時會跳轉的連結",
+          "valueType": "STRING"
+        },
+        "sStrategyTrialButtonUp": {
+          "defaultValue": {
+            "value": "立即升級"
+          },
+          "description": "彈窗右按紐 (常用於促使下一步)",
+          "valueType": "STRING"
+        },
+        "sStrategyTrialButtonDown": {
+          "defaultValue": {
+            "value": "考慮一下"
+          },
+          "description": "彈窗左按紐 (用於關閉彈窗)",
+          "valueType": "STRING"
+        },
+        "sStrategyTrialButtonControl": {
+          "defaultValue": {
+            "value": "1"
+          },
+          "description": "彈窗右按紐 1：連結內購頁 2：連結URL(啟動sStrategyTrialButtonUpLink)",
+          "valueType": "STRING"
+        }
+      }
+    },
+    "URL Config": {
+      "description": "URL 相關的 Config",
+      "parameters": {
+        "serverPushUrl": {
+          "defaultValue": {
+            "value": "https://mobile.cmoney.tw/"
+          },
+          "description": "目前 PAGEs 沒用到，但 Android 模組會吃",
+          "valueType": "STRING"
+        },
+        "vipServerUrl": {
+          "defaultValue": {
+            "value": "https://mobile.cmoney.tw/"
+          },
+          "description": "目前 PAGEs 沒用到，但 Android 模組會吃",
+          "valueType": "STRING"
+        },
+        "vipServerPushUrl": {
+          "defaultValue": {
+            "value": "https://mobile.cmoney.tw/"
+          },
+          "description": "目前 PAGEs 沒用到，但 Android 模組會吃",
+          "valueType": "STRING"
+        },
+        "serverUrl": {
+          "defaultValue": {
+            "value": "https://mobile.cmoney.tw/"
+          },
+          "description": "[登入服務] Login Domain",
+          "valueType": "STRING"
+        },
+        "additionInformationServerName": {
+          "defaultValue": {
+            "value": "AdditionInformationRevisit"
+          },
+          "description": "[附加資訊服務] TW API Server Name",
+          "valueType": "STRING"
+        },
+        "internationalDomain": {
+          "defaultValue": {
+            "value": "https://webstockr03.cmoney.tw/"
+          },
+          "description": "[附加資訊服務] International API Domain / 之前的：https://international.cmoney.tw/",
+          "valueType": "STRING"
+        },
+        "internationalServerName": {
+          "defaultValue": {
+            "value": "AdditionInformationRevisit"
+          },
+          "description": "[附加資訊服務] International API Server Name",
+          "valueType": "STRING"
+        },
+        "additionInformationDomain": {
+          "defaultValue": {
+            "value": "https://author-api.cmoney.tw:30443/"
+          },
+          "description": "[附加資訊服務] TW API Domain",
+          "valueType": "STRING"
+        },
+        "notesDomain": {
+          "defaultValue": {
+            "value": "https://www.cmoney.tw/"
+          },
+          "description": "[內容服務] Content Domain",
+          "valueType": "STRING"
+        },
+        "forumDomain": {
+          "defaultValue": {
+            "value": "https://forumservice.cmoney.tw/"
+          },
+          "description": "[社群服務] Community Domain",
+          "valueType": "STRING"
+        },
+        "chat_url": {
+          "defaultValue": {
+            "value": "https://talk.cmoney.tw/"
+          },
+          "description": "目前 PAGEs 沒用到，但 Android 模組會吃",
+          "valueType": "STRING"
+        },
+        "chat_ws_url": {
+          "defaultValue": {
+            "value": "wss://talk.cmoney.tw/api/websocket/"
+          },
+          "description": "目前 PAGEs 沒用到，但 Android 模組會吃",
+          "valueType": "STRING"
+        },
+        "internationalRealtimeWebSocketUrl": {
+          "defaultValue": {
+            "value": "wss://international.cmoney.tw:8098/"
+          },
+          "description": "[附加資訊服務] International WebSocket Domain",
+          "valueType": "STRING"
+        },
+        "realtimeWebSocketUrl": {
+          "defaultValue": {
+            "value": "wss://author.cmoney.tw/"
+          },
+          "description": "[附加資訊服務] TW WebSocket Domain",
+          "valueType": "STRING"
+        },
+        "vip_chat_url": {
+          "defaultValue": {
+            "value": "https://talk.cmoney.tw/"
+          },
+          "description": "目前 PAGEs 沒用到，但 Android 模組會吃",
+          "valueType": "STRING"
+        },
+        "vip_chat_ws_url": {
+          "defaultValue": {
+            "value": "wss://talk.cmoney.tw/api/websocket/"
+          },
+          "description": "目前 PAGEs 沒用到，但 Android 模組會吃",
+          "valueType": "STRING"
+        },
+        "vipRealtimeWebSocketUrl": {
+          "defaultValue": {
+            "value": "wss://author.cmoney.tw/"
+          },
+          "description": "目前 PAGEs 沒用到，但 Android 模組會吃",
+          "valueType": "STRING"
+        },
+        "blueprintServiceDomain": {
+          "defaultValue": {
+            "value": "https://connect.cmoney.tw/"
+          },
+          "description": "[Blueprint 服務] Blueprint Service Domain /3.0以後必備",
+          "valueType": "STRING"
+        },
+        "chatroomDomain": {
+          "defaultValue": {
+            "value": "wss://chatroom.cmoney.tw/"
+          },
+          "description": "[聊天室服務] Chatroom Domain",
+          "valueType": "STRING"
+        }
+      }
+    },
+    "策略觸發試用機制 (多方)": {
+      "parameters": {
+        "bStrategyTrialTitle": {
+          "defaultValue": {
+            "value": "已達每日體驗次數上限"
+          },
+          "description": "彈窗標題",
+          "valueType": "STRING"
+        },
+        "bStrategyTrialText": {
+          "defaultValue": {
+            "value": "升級專業版即可無限使用"
+          },
+          "description": "彈窗文字",
+          "valueType": "STRING"
+        },
+        "bStrategyTrialStatus": {
+          "defaultValue": {
+            "value": "0"
+          },
+          "description": "金鑰發動時機： 0 不啟用金鑰+關閉彈窗 1 啟用金鑰+觸發開起彈窗+觸發後重新計算次數 2 啟用金鑰+觸發開啟彈窗+觸發後相同動作皆觸發彈窗+隔天 重新計次數",
+          "valueType": "STRING"
+        },        
+        "bStrategyTrialButtonUpLink": {
+          "defaultValue": {
+            "value": ""
+          },
+          "description": "ButtonControl選2時會跳轉的連結",
+          "valueType": "STRING"
+        },
+        "bStrategyTrialButtonDown": {
+          "defaultValue": {
+            "value": "考慮一下"
+          },
+          "description": "彈窗左按紐 (用於關閉彈窗)",
+          "valueType": "STRING"
+        },
+        "bStrategyTrialButtonUp": {
+          "defaultValue": {
+            "value": "立即升級"
+          },
+          "description": "彈窗右按紐 (常用於促使下一步)",
+          "valueType": "STRING"
+        },
+        "bStrategyTrialButtonControl": {
+          "defaultValue": {
+            "value": "1"
+          },
+          "description": "彈窗右按紐 1：連結內購頁 2：連結URL(啟動bStrategyTrialButtonUpLink)",
+          "valueType": "STRING"
+        }
+      }
+    },    
+    "跑馬燈": {
+      "description": "文件連結：https://reurl.cc/nqAR1n\n",
+      "parameters": {
+        "marquee": {
+          "defaultValue": {
+            "value": "[{\"userType\":1,\"text\":\"Join now and get a FREE fractional share! Start your investing journey today with our exclusive sign-up bonus.\",\"color\":2,\"startTime\":\"2024/04/11 00:00\",\"endTime\":\"2028/05/15 23:59\",\"url\":\"https://www.cmoney.tw/app/itemcontent.aspx?id=5205\"},{\"userType\":1,\"text\":\"明天就要放假~祝周末愉快(專) 明天就要放假~祝大家周末愉快(專) 明天就要放假~祝大家周末愉快(專)\",\"color\":1,\"startTime\":\"2024/04/11 00:00\",\"endTime\":\"2028/05/15 23:59\",\"url\":\"https://www.cmoney.tw/app/itemcontent.aspx?id=5205\"},{\"userType\":2,\"text\":\"(Free)你看得到我嗎？我姓跑，名馬燈！(Free)你看得到我嗎？我姓跑，名馬燈！\",\"color\":0,\"startTime\":\"2024/04/11 00:00\",\"endTime\":\"2028/05/15 23:59\",\"url\":\"https://www.youtube.com/watch?v=U0N6TmDWuf8&ab_channel=Spassi\"},{\"userType\":0,\"text\":\"欢迎大家来到投资TALK君的APP，我们将提供多项略与内容，让你快速学习美股知识!\",\"color\":2,\"startTime\":\"2024/04/11 00:00\",\"endTime\":\"2024/05/12 23:59\",\"url\":\"https://www.cmoney.tw/app?uuids=20000001&int-main_tab_index=3&int-contentSectionIndex=1&long-stateCommunityMediaId=10427\"}]"
+          },
+          "description": "跑馬燈模組參數",
+          "valueType": "JSON"
+        },
+        "marqueeOpenType": {
+          "defaultValue": {
+            "value": "1"
+          },
+          "description": "跑馬燈模組開啟狀態 (0:關閉，1:全部開啟(預設值)，2:只開啟vip，3.只開啟free",
+          "valueType": "STRING"
+        }
+      }
+    }
+  }
+}

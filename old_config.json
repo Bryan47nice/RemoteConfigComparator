@@ -1,0 +1,505 @@
+{
+  "version": {
+    "versionNumber": "4",
+    "updateTime": "2025-02-05T07:11:08.222813Z",
+    "updateUser": {
+      "email": "bryan_jhuang@cmoney.com.tw"
+    },
+    "updateOrigin": "CONSOLE",
+    "updateType": "INCREMENTAL_UPDATE"
+  },
+  "parameterGroups": {
+    "AppStatus": {
+      "parameters": {
+        "appStatus": {
+          "defaultValue": {
+            "value": "1"
+          },
+          "description": "變更為 2適用於審查，1為可以使用，0為系統維護中，-1為需要更新，-2為建議更新",
+          "valueType": "STRING"
+        },
+        "statusAnnouncement": {
+          "defaultValue": {
+            "value": ""
+          },
+          "description": "常用於appStatus為0、-1、-2的時候，如果有填值，會在開啟App時跳彈窗顯示其內容",
+          "valueType": "STRING"
+        }
+      }
+    },
+    "ChatConfig": {
+      "parameters": {
+        "chat_url": {
+          "defaultValue": {
+            "value": "https://talk.cmoney.tw/"
+          },
+          "valueType": "STRING"
+        },
+        "chat_ws_url": {
+          "defaultValue": {
+            "value": "wss://talk.cmoney.tw/api/websocket/"
+          },
+          "valueType": "STRING"
+        },
+        "vip_chat_url": {
+          "defaultValue": {
+            "value": "https://talk.cmoney.tw/"
+          },
+          "valueType": "STRING"
+        },
+        "vip_chat_ws_url": {
+          "defaultValue": {
+            "value": "wss://talk.cmoney.tw/api/websocket/"
+          },
+          "valueType": "STRING"
+        }
+      }
+    },
+    "行銷彈窗 (new)": {
+      "description": "  文件連結： https://reurl.cc/d7xz8D",
+      "parameters": {
+        "AdNotifyInfo": {
+          "defaultValue": {
+            "value": "[\n  { \n   \"id\": 1,\n   \"userType\": 2, \n   \"imageUrl\":\"https://memeprod.sgp1.digitaloceanspaces.com/user-wtf/1664796105558.jpg\",\n   \"webUrl\":\"\",\n   \"buttonLeft\": {\"title\": \"我明白了2\",\"url\": \"\"},\n   \"buttonRight\": {\"title\": \"立即升級2\",\"url\": \"\"},\n   \"openType\": 1,\n   \"startTime\": \"\",\n   \"endTime\": \"\"\n  },\n  { \n    \"id\": 1,\n    \"userType\": 1, \n    \"imageUrl\": \"https://cf.shopee.tw/file/423d7783def285e44a156b93a37a9813\",\n    \"webUrl\": \" \",\n    \"buttonLeft\": {\"title\": \"丟\",\"url\": \"\"},\n    \"buttonRight\": {\"title\": \"大力地丟\",\"url\": \" \"},\n    \"openType\": 2,\n    \"startTime\": \"\",\n    \"endTime\": \"\"\n  }\n]"
+          },
+          "description": "文件連結： https://reurl.cc/aamKk3",
+          "valueType": "STRING"
+        }
+      }
+    },
+    "用戶權限": {
+      "parameters": {
+        "moreButtonAuthorityStatus": {
+          "defaultValue": {
+            "value": "0"
+          },
+          "description": "會員頁是否顯示升級專業版按鈕與權限：0(顯示), 1(隱藏)",
+          "valueType": "STRING"
+        }
+      }
+    },
+    "ApiConfig": {
+      "parameters": {
+        "serverPushUrl": {
+          "defaultValue": {
+            "value": "https://www.cmoney.tw/"
+          },
+          "valueType": "STRING"
+        },
+        "serverUrl": {
+          "defaultValue": {
+            "value": "https://mobile.cmoney.tw/"
+          },
+          "valueType": "STRING"
+        },
+        "vipServerPushUrl": {
+          "defaultValue": {
+            "value": "https://www.cmoney.tw/"
+          },
+          "valueType": "STRING"
+        },
+        "vipServerUrl": {
+          "defaultValue": {
+            "value": "https://www.cmoney.tw/"
+          },
+          "valueType": "STRING"
+        },
+        "internationalDomain": {
+          "defaultValue": {
+            "value": "https://international.cmoney.tw/"
+          },
+          "valueType": "STRING"
+        },
+        "additionInformationDomain": {
+          "defaultValue": {
+            "value": "https://author-api.cmoney.tw:30443/"
+          },
+          "valueType": "STRING"
+        },
+        "additionInformationServerName": {
+          "defaultValue": {
+            "value": "AdditionInformationRevisit"
+          },
+          "valueType": "STRING"
+        },
+        "internationalServerName": {
+          "defaultValue": {
+            "value": "AdditionInformationRevisit"
+          },
+          "valueType": "STRING"
+        },
+        "chatroomDomain": {
+          "defaultValue": {
+            "value": "wss://chatroom.cmoney.tw/"
+          },
+          "valueType": "STRING"
+        },
+        "forumDomain": {
+          "defaultValue": {
+            "value": "https://forumservice.cmoney.tw/"
+          },
+          "description": "社群內容的domain",
+          "valueType": "STRING"
+        }
+      }
+    },
+    "社團頁": {
+      "parameters": {
+        "vipclubFreeTitle": {
+          "defaultValue": {
+            "value": "此社團內容僅供專業版用戶查看"
+          },
+          "description": "要給免費用戶看到的文案標題",
+          "valueType": "STRING"
+        },
+        "vipclubFreeText": {
+          "defaultValue": {
+            "value": "升級專業版\\n即可瀏覽僅限專業版會員觀看的內容"
+          },
+          "description": "要給免費用戶看到的文案內容",
+          "valueType": "STRING"
+        },
+        "vipclubFreeButton": {
+          "defaultValue": {
+            "value": "立即升級"
+          },
+          "description": "要給免費用戶看到的導內購按鈕文字",
+          "valueType": "STRING"
+        },
+        "clubPageDefaultControl": {
+          "defaultValue": {
+            "value": "1"
+          },
+          "description": "控制社團頁預設頁籤 0- 聊天室 1- 作者專區 2- VIP社團",
+          "valueType": "STRING"
+        },
+        "chatroomMaintainText": {
+          "defaultValue": {
+            "value": "系統修復中，敬請見諒"
+          },
+          "description": "維護中的顯示文字",
+          "valueType": "STRING"
+        },
+        "chatroomFreeTitle": {
+          "defaultValue": {
+            "value": "聊天室僅供專業版用戶查看"
+          },
+          "description": "要給免費用戶看到的文案標題",
+          "valueType": "STRING"
+        },
+        "chatroomFreeText": {
+          "defaultValue": {
+            "value": "升級專業版\\n即可與作者即時互動，瀏覽他的最新觀點"
+          },
+          "description": "要給免費用戶看到的文案內容",
+          "valueType": "STRING"
+        },
+        "chatroomFreeButton": {
+          "defaultValue": {
+            "value": "立即升級"
+          },
+          "description": "要給免費用戶看到的導內購按鈕文字",
+          "valueType": "STRING"
+        },
+        "chatroomControl": {
+          "defaultValue": {
+            "value": "0"
+          },
+          "description": "0 - 正常開放 1 - 維護中 2- VIP聊天室擋免費用戶 ",
+          "valueType": "STRING"
+        }
+      }
+    },
+    "策略觸發試用機制 (多方)": {
+      "parameters": {
+        "bStrategyTrialButtonControl": {
+          "defaultValue": {
+            "value": "1"
+          },
+          "description": "彈窗右按紐 1：連結內購頁 2：連結URL(啟動bStrategyTrialButtonUpLink)",
+          "valueType": "STRING"
+        },
+        "bStrategyTrialButtonDown": {
+          "defaultValue": {
+            "value": "考慮一下"
+          },
+          "description": "彈窗左按紐 (用於關閉彈窗)",
+          "valueType": "STRING"
+        },
+        "bStrategyTrialButtonUp": {
+          "defaultValue": {
+            "value": "立即升級"
+          },
+          "description": "彈窗右按紐 (常用於促使下一步)",
+          "valueType": "STRING"
+        },
+        "bStrategyTrialButtonUpLink": {
+          "defaultValue": {
+            "value": ""
+          },
+          "description": "ButtonControl選2時會跳轉的連結",
+          "valueType": "STRING"
+        },
+        "bStrategyTrialKey": {
+          "defaultValue": {
+            "value": "7ee83024-ec85-495e-ba1d-e07b9a17f1ce"
+          },
+          "description": "試用金鑰",
+          "valueType": "STRING"
+        },
+        "bStrategyTrialStatus": {
+          "defaultValue": {
+            "value": "0"
+          },
+          "description": "金鑰發動時機： 0 不啟用金鑰+關閉彈窗 1 啟用金鑰+觸發開起彈窗+觸發後重新計算次數 2 啟用金鑰+觸發開啟彈窗+觸發後相同動作皆觸發彈窗+隔天 重新計次數",
+          "valueType": "STRING"
+        },
+        "bStrategyTrialText": {
+          "defaultValue": {
+            "value": "升級專業版即可無限使用"
+          },
+          "description": "彈窗文字",
+          "valueType": "STRING"
+        },
+        "bStrategyTrialTitle": {
+          "defaultValue": {
+            "value": "已達每日體驗次數上限"
+          },
+          "description": "彈窗標題",
+          "valueType": "STRING"
+        }
+      }
+    },
+    "serial 自動開通序號": {
+      "parameters": {
+        "serialKey": {
+          "defaultValue": {
+            "value": ""
+          },
+          "description": "序號key",
+          "valueType": "STRING"
+        },
+        "serialStatus": {
+          "defaultValue": {
+            "value": "0"
+          },
+          "description": "序號狀態: 0 關閉、1 開啟",
+          "valueType": "STRING"
+        }
+      }
+    },
+    "策略觸發試用機制 (空方)": {
+      "parameters": {
+        "sStrategyTrialTitle": {
+          "defaultValue": {
+            "value": "已達每日體驗次數上限"
+          },
+          "description": "彈窗標題",
+          "valueType": "STRING"
+        },
+        "sStrategyTrialText": {
+          "defaultValue": {
+            "value": "升級專業版即可無限使用"
+          },
+          "description": "彈窗文字",
+          "valueType": "STRING"
+        },
+        "sStrategyTrialStatus": {
+          "defaultValue": {
+            "value": "0"
+          },
+          "description": "金鑰發動時機： 0 不啟用金鑰+關閉彈窗 1 啟用金鑰+觸發開起彈窗+觸發後重新計算次數 2 啟用金鑰+觸發開啟彈窗+觸發後相同動作皆觸發彈窗+隔天 重新計次數",
+          "valueType": "STRING"
+        },
+        "sStrategyTrialKey": {
+          "defaultValue": {
+            "value": ""
+          },
+          "description": "試用金鑰",
+          "valueType": "STRING"
+        },
+        "sStrategyTrialButtonUpLink": {
+          "defaultValue": {
+            "value": ""
+          },
+          "description": "ButtonControl選2時會跳轉的連結",
+          "valueType": "STRING"
+        },
+        "sStrategyTrialButtonUp": {
+          "defaultValue": {
+            "value": "立即升級"
+          },
+          "description": "彈窗右按紐 (常用於促使下一步)",
+          "valueType": "STRING"
+        },
+        "sStrategyTrialButtonDown": {
+          "defaultValue": {
+            "value": "考慮一下"
+          },
+          "description": "彈窗左按紐 (用於關閉彈窗)",
+          "valueType": "STRING"
+        },
+        "sStrategyTrialButtonControl": {
+          "defaultValue": {
+            "value": "1"
+          },
+          "description": "彈窗右按紐 1：連結內購頁 2：連結URL(啟動sStrategyTrialButtonUpLink)",
+          "valueType": "STRING"
+        }
+      }
+    },
+    "跑馬燈模組 (new)": {
+      "description": " 文件連結： https://reurl.cc/x1MVGe",
+      "parameters": {
+        "marqueeOpenType": {
+          "defaultValue": {
+            "value": "0"
+          },
+          "description": "跑馬燈模組開啟狀態 (0:關閉，1:全部開啟(預設值)，2:只開啟vip，3.只開啟free",
+          "valueType": "STRING"
+        },
+        "marquee": {
+          "defaultValue": {
+            "value": " [{\n    \"userType\": 1,\n    \"text\": \"明天就要放假~祝大家周末愉快(專)\",\n    \"color\": 0,\n    \"startTime\": \"\",\n    \"endTime\": \"\",\n    \"url\": \"https://www.cmoney.tw/app/default.aspx\"\n  },\n  {\n    \"userType\": 2,\n    \"text\": \"明天就要放假~祝大家周末愉快(免)\",\n    \"color\": 0,\n    \"startTime\": \"\",\n    \"endTime\": \"\",\n    \"url\": \"https://www.cmoney.tw/app/default.aspx\"\n  }]"
+          },
+          "description": "跑馬燈模組參數",
+          "valueType": "JSON"
+        }
+      }
+    },
+    "隱藏會員中心 (IOS 送審用)": {
+      "parameters": {
+        "moreMemberStatus": {
+          "defaultValue": {
+            "value": ""
+          },
+          "description": "\"0：開啟會員中心 1：關閉會員中心\"",
+          "valueType": "STRING"
+        }
+      }
+    },
+    "RealTimeConfig": {
+      "parameters": {
+        "realtimeWebSocketUrl": {
+          "defaultValue": {
+            "value": "wss://author.cmoney.tw/"
+          },
+          "valueType": "STRING"
+        },
+        "vipRealtimeWebSocketUrl": {
+          "defaultValue": {
+            "value": "wss://author.cmoney.tw/"
+          },
+          "valueType": "STRING"
+        },
+        "internationalRealtimeWebSocketUrl": {
+          "defaultValue": {
+            "value": "wss://international.cmoney.tw:8098/"
+          },
+          "valueType": "STRING"
+        }
+      }
+    },
+    "內購按鈕": {
+      "parameters": {
+        "iapButton": {
+          "defaultValue": {
+            "value": "即刻購買"
+          },
+          "valueType": "STRING"
+        },
+        "iapButtonControl": {
+          "defaultValue": {
+            "value": "1"
+          },
+          "description": "內購按紐跳轉/ 1.內購 、2.導向網頁網址(啟動button URL)",
+          "valueType": "NUMBER"
+        },
+        "iapButtonUrl": {
+          "defaultValue": {
+            "value": "http://www.cmoney.tw/app/"
+          },
+          "valueType": "STRING"
+        },
+        "iapTextDown": {
+          "defaultValue": {
+            "value": "特價xx元"
+          },
+          "valueType": "STRING"
+        },
+        "iapTextUp": {
+          "defaultValue": {
+            "value": ""
+          },
+          "valueType": "STRING"
+        },
+        "iapTextLeftUp": {
+          "defaultValue": {
+            "value": "原價xx元"
+          },
+          "valueType": "STRING"
+        }
+      }
+    },
+    "個股切換試用機制 (看個股的次數)": {
+      "parameters": {
+        "sStockTrialTitle": {
+          "defaultValue": {
+            "value": "已達個股每日體驗次數上限"
+          },
+          "description": "彈窗標題",
+          "valueType": "STRING"
+        },
+        "sStockTrialText": {
+          "defaultValue": {
+            "value": "升級專業版即可無限使用"
+          },
+          "description": "彈窗文字",
+          "valueType": "STRING"
+        },
+        "sStockTrialStatus": {
+          "defaultValue": {
+            "value": "0"
+          },
+          "description": "個股切換發動時機： 0 不啟用金鑰+關閉彈窗 / 1 啟用金鑰+觸發開起彈窗+觸發後重新計算次數 / 2 啟用金鑰+觸發開啟彈窗+觸發後相同動作皆觸發彈窗+隔天 重新計次數",
+          "valueType": "STRING"
+        },
+        "sStockTrialButtonUpLink": {
+          "defaultValue": {
+            "value": ""
+          },
+          "description": "ButtonControl選2時會跳轉的連結",
+          "valueType": "STRING"
+        },
+        "sStockTrialKey": {
+          "defaultValue": {
+            "value": "e61369d3-33dc-42fc-8eff-0b15adaf6fcd"
+          },
+          "description": "試用金鑰",
+          "valueType": "STRING"
+        },
+        "sStockTrialButtonUp": {
+          "defaultValue": {
+            "value": "立即升級"
+          },
+          "description": "彈窗右按紐 (常用於促使下一步)",
+          "valueType": "STRING"
+        },
+        "sStockTrialButtonDown": {
+          "defaultValue": {
+            "value": "考慮一下"
+          },
+          "description": "彈窗左按紐 (用於關閉彈窗)",
+          "valueType": "STRING"
+        },
+        "sStockTrialButtonControl": {
+          "defaultValue": {
+            "value": "1"
+          },
+          "description": "點擊彈窗右按紐後的行為，1：連結內購頁，2：連結URL(啟動sStockTrialButtonUpLink)",
+          "valueType": "STRING"
+        }
+      }
+    }
+  }
+}
