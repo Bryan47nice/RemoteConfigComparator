@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Remote Config JSON設定檔比較工具</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .upload-container {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        .file-input-group {
+            margin: 10px 0;
+        }
+        .compare-button {
+            margin: 20px 0;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .compare-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+            word-wrap: break-word;
+            max-width: 0;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .change-table td:nth-child(1),
+        .change-table td:nth-child(2),
+        .change-table td:nth-child(3) {
+            width: 13.33%;
+        }
+        .change-table td:nth-child(4),
+        .change-table td:nth-child(5) {
+            width: 30%;
+        }
+        .add-delete-table td:nth-child(1),
+        .add-delete-table td:nth-child(2) {
+            width: 15%;
+        }
+        .add-delete-table td:nth-child(3) {
+            width: 10%;
+        }
+        .add-delete-table td:nth-child(4) {
+            width: 25%;
+        }
+        .add-delete-table td:nth-child(5) {
+            width: 35%;
+        }
+        .code-block {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        .file-info {
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+        }
+        .timestamp {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            text-align: right;
+            font-style: italic;
+        }
+        #results {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>JSON 設定檔比較工具</h1>
+    
+    <div class="upload-container">
+        <div class="file-input-group">
+            <label for="oldFile">舊檔案：</label>
+            <input type="file" id="oldFile" accept=".json">
+        </div>
+        <div class="file-input-group">
+            <label for="newFile">新檔案：</label>
+            <input type="file" id="newFile" accept=".json">
+        </div>
+        <button id="compareButton" class="compare-button" disabled>比較檔案</button>
+    </div>
+
+    <div id="results">
+        <div id="fileInfo" class="file-info"></div>
+        <div id="changesContent"></div>
+        <div id="timestamp" class="timestamp"></div>
+    </div>
+    <script>
+        function isCode(text) {
+            const codeIndicators = [
+                '{', '}', ';', 'function', 'class', 'def',
+                'return', 'if', 'else', 'for', 'while'
+            ];
+            return codeIndicators.some(indicator => String(text).includes(indicator));
+        }
+
+        function formatContent(content) {
+            if (typeof content === 'object' && content !== null) {
+                content = JSON.stringify(content, null, 2);
+            }
+            if (isCode(content)) {
+                content = String(content).trim().replace(/^["']|["']$/g, '');
+                return `<div class="code-block">${content}</div>`;
+            }
+            return String(content);
+        }
+
+        function compareJson(old, new_, path = "", currentGroup = "") {
+            const changes = {"變更": [], "新增": [], "刪除": []};
+            
+            if (path.toLowerCase().includes("version")) {
+                return changes;
+            }
+
+            if (typeof old === 'object' && old !== null && typeof new_ === 'object' && new_ !== null) {
+                const allKeys = new Set([...Object.keys(old), ...Object.keys(new_)]);
+                
+                for (const key of allKeys) {
+                    if (key.toLowerCase().includes("version")) continue;
+                    
+                    // 處理新增的情況
+                    if (!(key in old) && (key in new_)) {
+                        if (path.includes("parameterGroups")) {
+                            const groupName = path.split('.')[1];
+                            changes["新增"].push({
+                                type: 'group',
+                                group: groupName,
+                                description: new_[key]
+                            });
+                        } else if (path.includes("parameters")) {
+                            const paramPath = path.split('parameters.')[1];
+                            const paramName = paramPath ? paramPath.split('.')[0] : key;
+                            changes["新增"].push({
+                                type: 'parameter',
+                                group: currentGroup,
+                                parameter: paramName,
+                                valueType: new_[key].valueType || '',
+                                description: new_[key].description || '',
+                                value: new_[key].defaultValue || new_[key]
+                            });
+                        }
+                        continue;
+                    }
+
+                    // 處理刪除的情況
+                    if ((key in old) && !(key in new_)) {
+                        if (path.includes("parameterGroups")) {
+                            const groupName = path.split('.')[1];
+                            changes["刪除"].push({
+                                type: 'group',
+                                group: groupName,
+                                description: old[key]
+                            });
+                        } else if (path.includes("parameters")) {
+                            const paramPath = path.split('parameters.')[1];
+                            const paramName = paramPath ? paramPath.split('.')[0] : key;
+                            changes["刪除"].push({
+                                type: 'parameter',
+                                group: currentGroup,
+                                parameter: paramName,
+                                valueType: old[key].valueType || '',
+                                description: old[key].description || '',
+                                value: old[key].defaultValue || old[key]
+                            });
+                        }
+                        continue;
+                    }
+
+                    // 處理變更的情況
+                    if (!isEqual(old[key], new_[key])) {
+                        const newPath = path ? `${path}.${key}` : key;
+                        const newGroup = key === "parameterGroups" ? currentGroup : 
+                                       path.includes("parameterGroups") ? path.split('.')[1] : 
+                                       currentGroup;
+
+                        if (typeof old[key] !== 'object' || typeof new_[key] !== 'object') {
+                            changes["變更"].push({
+                                path: newPath,
+                                oldValue: old[key],
+                                newValue: new_[key]
+                            });
+                        }
+
+                        if (typeof old[key] === 'object' && typeof new_[key] === 'object') {
+                            const subChanges = compareJson(old[key], new_[key], newPath, newGroup);
+                            for (const [changeType, entries] of Object.entries(subChanges)) {
+                                changes[changeType].push(...entries);
+                            }
+                        }
+                    }
+                }
+            }
+            return changes;
+        }
+
+        function isEqual(a, b) {
+            if (a === b) return true;
+            if (typeof a !== typeof b) return false;
+            if (typeof a !== 'object') return false;
+            if (Array.isArray(a) !== Array.isArray(b)) return false;
+            
+            const keysA = Object.keys(a);
+            const keysB = Object.keys(b);
+            
+            if (keysA.length !== keysB.length) return false;
+            
+            return keysA.every(key => isEqual(a[key], b[key]));
+        }
+
+        function parseChangePath(path) {
+            const parts = path.split('.');
+            let parameterGroups = "";
+            let parameters = "";
+            let category = "";
+            
+            for (let i = 0; i < parts.length; i++) {
+                if (parts[i] === "parameterGroups" && i + 1 < parts.length) {
+                    parameterGroups = parts[i + 1];
+                } else if (parts[i] === "parameters" && i + 1 < parts.length) {
+                    parameters = parts[i + 1];
+                    if (i + 2 < parts.length) {
+                        category = parts[i + 2];
+                    }
+                }
+            }
+            
+            return { parameterGroups, parameters, category };
+        }
+
+        function generateChangesHtml(changes, oldFilename, newFilename) {
+            let html = '';
+            
+            // 變更表格
+            if (changes["變更"].length > 0) {
+                html += `
+                    <h2>變更項目</h2>
+                    <table class="change-table">
+                        <thead>
+                            <tr>
+                                <th>parameterGroups</th>
+                                <th>parameters</th>
+                                <th>類別</th>
+                                <th>原始值</th>
+                                <th>新值</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                changes["變更"].forEach(change => {
+                    const pathInfo = parseChangePath(change.path);
+                    html += `
+                        <tr>
+                            <td>${pathInfo.parameterGroups || ''}</td>
+                            <td>${pathInfo.parameters || ''}</td>
+                            <td>${pathInfo.category || ''}</td>
+                            <td>${formatContent(change.oldValue)}</td>
+                            <td>${formatContent(change.newValue)}</td>
+                        </tr>
+                    `;
+                });
+                
+                html += '</tbody></table>';
+            }
+
+            // 新增表格
+            if (changes["新增"].length > 0) {
+                html += `
+                    <h2>新增項目</h2>
+                    <table class="add-delete-table">
+                        <thead>
+                            <tr>
+                                <th>parameterGroups</th>
+                                <th>parameters</th>
+                                <th>資料類別</th>
+                                <th>描述</th>
+                                <th>新增內容</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                changes["新增"].forEach(addition => {
+                    if (addition.type === 'group') {
+                        html += `
+                            <tr>
+                                <td>${addition.group}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>${formatContent(addition.description)}</td>
+                            </tr>
+                        `;
+                    } else if (addition.type === 'parameter') {
+                        html += `
+                            <tr>
+                                <td>${addition.group}</td>
+                                <td>${addition.parameter}</td>
+                                <td>${addition.valueType}</td>
+                                <td>${addition.description}</td>
+                                <td>${formatContent(addition.value)}</td>
+                            </tr>
+                        `;
+                    }
+                });
+                
+                html += '</tbody></table>';
+            }
+
+            // 刪除表格
+            if (changes["刪除"].length > 0) {
+                html += `
+                    <h2>刪除項目</h2>
+                    <table class="add-delete-table">
+                        <thead>
+                            <tr>
+                                <th>parameterGroups</th>
+                                <th>parameters</th>
+                                <th>資料類別</th>
+                                <th>描述</th>
+                                <th>刪除內容</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                changes["刪除"].forEach(deletion => {
+                    if (deletion.type === 'group') {
+                        html += `
+                            <tr>
+                                <td>${deletion.group}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>${formatContent(deletion.description)}</td>
+                            </tr>
+                        `;
+                    } else if (deletion.type === 'parameter') {
+                        html += `
+                            <tr>
+                                <td>${deletion.group}</td>
+                                <td>${deletion.parameter}</td>
+                                <td>${deletion.valueType}</td>
+                                <td>${deletion.description}</td>
+                                <td>${formatContent(deletion.value)}</td>
+                            </tr>
+                        `;
+                    }
+                });
+                
+                html += '</tbody></table>';
+            }
+
+            if (!changes["變更"].length && !changes["新增"].length && !changes["刪除"].length) {
+                html = '<p>沒有發現任何差異。</p>';
+            }
+
+            return html;
+        }
+
+        // UI 互動相關程式碼
+        const oldFileInput = document.getElementById('oldFile');
+        const newFileInput = document.getElementById('newFile');
+        const compareButton = document.getElementById('compareButton');
+        const resultsDiv = document.getElementById('results');
+        const fileInfoDiv = document.getElementById('fileInfo');
+        const changesContentDiv = document.getElementById('changesContent');
+        const timestampDiv = document.getElementById('timestamp');
+
+        function checkFiles() {
+            compareButton.disabled = !(oldFileInput.files.length && newFileInput.files.length);
+        }
+
+        oldFileInput.addEventListener('change', checkFiles);
+        newFileInput.addEventListener('change', checkFiles);
+
+        compareButton.addEventListener('click', async () => {
+            const oldFile = oldFileInput.files[0];
+            const newFile = newFileInput.files[0];
+
+            try {
+                const oldData = JSON.parse(await oldFile.text());
+                const newData = JSON.parse(await newFile.text());
+
+                const changes = compareJson(oldData, newData);
+                
+                fileInfoDiv.innerHTML = `
+                    <h3>檔案比較</h3>
+                    <p>舊檔案: ${oldFile.name}</p>
+                    <p>新檔案: ${newFile.name}</p>
+                `;
+                
+                changesContentDiv.innerHTML = generateChangesHtml(changes, oldFile.name, newFile.name);
+                
+                const now = new Date();
+                const timeString = now.toLocaleString('zh-TW', { 
+                    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false
+                });
+                timestampDiv.textContent = `執行時間：${timeString}`;
+                
+                resultsDiv.style.display = 'block';
+            } catch (error) {
+                alert('檔案解析錯誤：' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>
+
