@@ -1,0 +1,35 @@
+.code-block {
+    background-color: var(--code-bg);
+    color: var(--text-primary);
+    padding: 12px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    white-space: pre;
+    font-family: 'Consolas', 'Monaco', monospace;
+    overflow-x: auto;
+}
+
+#timestamp {
+    text-align: right;
+    color: var(--text-secondary);
+    font-size: 0.9em;
+    margin-top: 20px;
+}
+
+#fileInfo {
+    background-color: var(--bg-secondary);
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+}
+
+#fileInfo h3 {
+    margin-top: 0;
+    color: var(--accent-color);
+}
+
+#fileInfo p {
+    margin: 5px 0;
+    color: var(--text-secondary);
+}

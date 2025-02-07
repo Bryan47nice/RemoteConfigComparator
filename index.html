@@ -1,83 +1,38 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>變更、新增和刪除內容</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
-        h2 {
-            color: #333;
-        }
-    </style>
+    <title>Remote Config JSON設定檔比較工具</title>
+    <!-- 引入主要 CSS 檔案，它會匯入其他所有需要的 CSS 模組 -->
+    <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
+    <h1>Remote Config JSON設定檔比較工具</h1>
+    
+    <div class="upload-container">
+        <div class="file-input-group">
+            <label for="oldFile">選擇舊的JSON檔案：</label>
+            <input type="file" id="oldFile" accept=".json">
+        </div>
+        
+        <div class="file-input-group">
+            <label for="newFile">選擇新的JSON檔案：</label>
+            <input type="file" id="newFile" accept=".json">
+        </div>
+        
+        <button id="compareButton" class="compare-button" disabled>比較檔案</button>
+    </div>
 
-<h2>變更內容</h2>
-<table>
-    <thead>
-        <tr>
-            <th>項目</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr><td>parameterGroups.AppStatus.parameters.statusAnnouncement.description 從 "審查中 版本已不提供支援，需要更新 已有新版本，前往更新，體驗新功能 系統維護中..." 變更為 常用於appStatus為0、-1、-2的時候，如果有填值，會在開啟App時跳彈窗顯示其內容</td></tr>
-        <tr><td>parameterGroups.AppStatus.parameters.appStatus.description 從 2 為審查中1 為 可以使用 0 為系統維護中 -1 為需要更新 -2建議更新 變更為 2適用於審查，1為可以使用，0為系統維護中，-1為需要更新，-2為建議更新</td></tr>
-        <tr><td>parameterGroups.個股切換試用機制 (看個股的次數).parameters.sStockTrialButtonUp.description 從 彈窗上按紐 變更為 彈窗右按紐 (常用於促使下一步)</td></tr>
-        <tr><td>parameterGroups.個股切換試用機制 (看個股的次數).parameters.sStockTrialTitle.defaultValue.value 從 已達每日體驗次數上限 變更為 已達個股每日體驗次數上限</td></tr>
-        <tr><td>parameterGroups.個股切換試用機制 (看個股的次數).parameters.sStockTrialButtonUpLink.description 從 連結 變更為 ButtonControl選2時會跳轉的連結</td></tr>
-        <tr><td>parameterGroups.個股切換試用機制 (看個股的次數).parameters.sStockTrialButtonControl.description 從 "彈窗上按紐 1：連結內購頁 2：連結URL(啟動strategyTrialButtonUpLink)" 變更為 點擊彈窗右按紐後的行為，1：連結內購頁，2：連結URL(啟動sStockTrialButtonUpLink)</td></tr>
-        <tr><td>parameterGroups.個股切換試用機制 (看個股的次數).parameters.sStockTrialButtonDown.description 從 彈窗下按紐 變更為 彈窗左按紐 (用於關閉彈窗)</td></tr>
-        <tr><td>parameterGroups.個股切換試用機制 (看個股的次數).parameters.sStockTrialStatus.description 從 "發動時機： 0 不啟用金鑰+關閉彈窗 1 啟用金鑰+觸發開起彈窗+觸發後重新計算次數 2 啟用金鑰+觸發開啟彈窗+觸發後相同動作皆觸發彈窗+隔天 重新計次數" 變更為 個股切換發動時機： 0 不啟用金鑰+關閉彈窗 /  1 啟用金鑰+觸發開起彈窗+觸發後重新計算次數 / 2 啟用金鑰+觸發開啟彈窗+觸發後相同動作皆觸發彈窗+隔天 重新計次數</td></tr>
-        <tr><td>parameterGroups.個股切換試用機制 (看個股的次數).parameters.sStockTrialStatus.defaultValue.value 從 0 變更為 </td></tr>
-        <tr><td>parameterGroups.策略觸發試用機制 (空方).parameters.sStrategyTrialButtonDown.description 從 彈窗下按紐 變更為 彈窗左按紐 (用於關閉彈窗)</td></tr>
-        <tr><td>parameterGroups.策略觸發試用機制 (空方).parameters.sStrategyTrialButtonUpLink.description 從 連結 變更為 ButtonControl選2時會跳轉的連結</td></tr>
-        <tr><td>parameterGroups.策略觸發試用機制 (空方).parameters.sStrategyTrialButtonControl.description 從 "彈窗上按紐 1：連結內購頁 2：連結URL(啟動strategyTrialButtonUpLink)" 變更為 彈窗右按紐 1：連結內購頁 2：連結URL(啟動sStrategyTrialButtonUpLink)</td></tr>
-        <tr><td>parameterGroups.策略觸發試用機制 (空方).parameters.sStrategyTrialButtonUp.description 從 彈窗上按紐 變更為 彈窗右按紐 (常用於促使下一步)</td></tr>
-        <tr><td>parameterGroups.策略觸發試用機制 (空方).parameters.sStrategyTrialStatus.description 從 "發動時機： 0 不啟用金鑰+關閉彈窗 1 啟用金鑰+觸發開起彈窗+觸發後重新計算次數 2 啟用金鑰+觸發開啟彈窗+觸發後相同動作皆觸發彈窗+隔天 重新計次數" 變更為 金鑰發動時機： 0 不啟用金鑰+關閉彈窗 1 啟用金鑰+觸發開起彈窗+觸發後重新計算次數 2 啟用金鑰+觸發開啟彈窗+觸發後相同動作皆觸發彈窗+隔天 重新計次數</td></tr>
-        <tr><td>parameterGroups.內購按鈕.parameters.iapButtonControl.valueType 從 STRING 變更為 NUMBER</td></tr>
-        <tr><td>parameterGroups.內購按鈕.parameters.iapButtonControl.description 從 "1.內購 2.導向網頁網址(啟動button URL)" 變更為 內購按紐跳轉/ 1.內購 、2.導向網頁網址(啟動button URL)</td></tr>
-        <tr><td>parameterGroups.內購按鈕.parameters.iapButton.defaultValue.value 從 立即升級 變更為 即刻購買</td></tr>
-        <tr><td>parameterGroups.策略觸發試用機制 (多方).parameters.bStrategyTrialButtonDown.description 從 彈窗下按紐 變更為 彈窗左按紐 (用於關閉彈窗)</td></tr>
-        <tr><td>parameterGroups.策略觸發試用機制 (多方).parameters.bStrategyTrialButtonUp.description 從 彈窗上按紐 變更為 彈窗右按紐 (常用於促使下一步)</td></tr>
-        <tr><td>parameterGroups.策略觸發試用機制 (多方).parameters.bStrategyTrialButtonUpLink.description 從 連結 變更為 ButtonControl選2時會跳轉的連結</td></tr>
-        <tr><td>parameterGroups.策略觸發試用機制 (多方).parameters.bStrategyTrialStatus.description 從 "發動時機： 0 不啟用金鑰+關閉彈窗 1 啟用金鑰+觸發開起彈窗+觸發後重新計算次數 2 啟用金鑰+觸發開啟彈窗+觸發後相同動作皆觸發彈窗+隔天 重新計次數" 變更為 金鑰發動時機： 0 不啟用金鑰+關閉彈窗 1 啟用金鑰+觸發開起彈窗+觸發後重新計算次數 2 啟用金鑰+觸發開啟彈窗+觸發後相同動作皆觸發彈窗+隔天 重新計次數</td></tr>
-        <tr><td>parameterGroups.策略觸發試用機制 (多方).parameters.bStrategyTrialButtonControl.description 從 "彈窗上按紐 1：連結內購頁 2：連結URL(啟動strategyTrialButtonUpLink)" 變更為 彈窗右按紐 1：連結內購頁 2：連結URL(啟動bStrategyTrialButtonUpLink)</td></tr>
-        <tr><td>version.versionNumber 從 2 變更為 47</td></tr>
-        <tr><td>version.updateUser.email 從 anna_chen@cmoney.com.tw 變更為 bryan_jhuang@cmoney.com.tw</td></tr>
-        <tr><td>version.updateTime 從 2025-01-03T14:03:40.131040Z 變更為 2025-01-23T09:01:53.413494Z</td></tr>
-    </tbody>
-</table>
+    <div id="results" style="display: none;">
+        <div id="fileInfo"></div>
+        <div id="changesContent"></div>
+        <div id="timestamp"></div>
+    </div>
 
-<h2>新增內容</h2>
-<table>
-    <thead>
-        <tr>
-            <th>項目</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr><td>parameterGroups.跑馬燈，值為 {'description': '文件連結：https://reurl.cc/nqAR1n\\n', 'parameters': {'marquee': {'defaultValue': {'value': '[{\"userType\":1,\"text\":\"Join now and get a FREE fractional share! Start your investing journey today with our exclusive sign-up bonus.\",\"color\":2,\"startTime\":\"2024/04/11 00:00\",\"endTime\":\"2028/05/15 23:59\",\"url\":\"https://www.cmoney.tw/app/itemcontent.aspx?id=5205\"},{\"userType\":1,\"text\":\"明天就要放假~祝周末愉快(專) 明天就要放假~祝大家周末愉快(專) 明天就要放假~祝大家周末愉快(專)\",\"color\":1,\"startTime\":\"2024/04/11 00:00\",\"endTime\":\"2028/05/15 23:59\",\"url\":\"https://www.cmoney.tw/app/itemcontent.aspx?id=5205\"},{\"userType\":2,\"text\":\"(Free)你看得到我嗎？我姓跑，名馬燈！(Free)你看得到我嗎？我姓跑，名馬燈！\",\"color\":0,\"startTime\":\"2024/04/11 00:00\",\"endTime\":\"2028/05/15 23:59\",\"url\":\"https://www.youtube.com/watch?v=U0N6TmDWuf8&ab_channel=Spassi\"},{\"userType\":0,\"text\":\"欢迎大家来到投资TALK君的APP，我们将提供多项略与内容，让你快速学习美股知识!\",\"color\":2,\"startTime\":\"2024/04/11 00:00\",\"endTime\":\"2024/05/12 23:59\",\"url\":\"https://www.cmoney.tw/app?uuids=20000001&int-main_tab_index=3&int-contentSectionIndex=1&long-stateCommunityMediaId=10427\"}]'}, 'description': '跑馬燈模組參數', 'valueType': 'JSON'}, 'marqueeOpenType': {'defaultValue': {'value': '1'}, 'description': '跑馬燈模組開啟狀態 (0:關閉，1:全部開啟(預設值)，2:只開啟vip，3.只開啟free', 'valueType': 'STRING'}}}</td></tr>
-        <tr><td>parameterGroups.AppStatus.description，值為 用來控制此App的狀態，例如控制是否讓用戶能夠使用等等</td></tr>
-        <tr><td>parameterGroups.行銷彈窗，值為 {'parameters': {'AdNotifyInfo': {'defaultValue': {'value': '[\\n  { \\n   \"id\": 0,\\n   \"userType\": 1, \\n   \"imageUrl\":\"https://memeprod.sgp1.digitaloceanspaces.com/user-wtf/1664796105558.jpg\",\\n   \"webUrl\":\"\",\\n   \"buttonLeft\": {\"title\": \"我明白了2\",\"url\": \"\"},\\n   \"buttonRight\": {\"title\": \"立即升級2\",\"url\": \"\"},\\n   \"openType\": 2,\\n   \"startTime\": \"2025/1/24 00:00\",\\n   \"endTime\": \"2025/1/24 09:30\"\\n  },\\n  { \\n    \"id\": 1,\\n    \"userType\": 1, \\n    \"imageUrl\": \"https://cf.shopee.tw/file/423d7783def285e44a156b93a37a9813\",\\n    \"webUrl\": \" \",\\n    \"buttonLeft\": {\"title\": \"丟\",\"url\": \"\"},\\n    \"buttonRight\": {\"title\": \"大力地丟\",\"url\": \" \"},\\n    \"openType\": 2,\\n    \"startTime\": \"2025/1/24 09:30\",\\n    \"endTime\": \"\"\\n  }\\n]'}, 'description': '文件連結： https://reurl.cc/aamKk3', 'valueType': 'STRING'}}}</td></tr>
-        <tr><td>parameterGroups.內購按鈕.parameters.iapButton.description，值為 內購按鈕上方的文字  (在多方案的情況下，不同方案都是同一組)</td></tr>
-        <tr><td>parameterGroups.內購按鈕.parameters.iapPlanInfoList，值為 {'defaultValue': {'value': '[{\"iosProductID\":\"CMoney.ProductionLine.PagesAssemble.OneMonth.IOS\",\"androidProductID\":\"cmoney.page.onemonth.android\",\"iapButtonUrl\":\"https://test.cmoney.tw/app/ItemContent.aspx?id=4906\",\"iapTextLeftUp\":\"\",\"iapTextUp\":\"早鳥超值月優惠】\",\"iapTextDown\":\"$49 USD/月 \"},{\"iosProductID\":\"CMoney.ProductionLine.PagesAssemble.OneMonth.IOS\",\"androidProductID\":\"cmoney.page.onemonth.android\",\"iapButtonUrl\":\"https://test.cmoney.tw/app/ItemContent.aspx?id=4906\",\"iapTextLeftUp\":\"\",\"iapTextUp\":\"早鳥必買季優惠】\",\"iapTextDown\":\"$135 USD/季 \"},{\"iosProductID\":\"CMoney.ProductionLine.PagesAssemble.OneMonth.IOS\",\"androidProductID\":\"cmoney.page.onemonth.android\",\"iapButtonUrl\":\"https://test.cmoney.tw/app/ItemContent.aspx?id=4906\",\"iapTextLeftUp\":\"\",\"iapTextUp\":\"早鳥必買季優惠】\",\"iapTextDown\":\"$500 USD/年 \"}]'}, 'description': '內購多方案內容', 'valueType': 'JSON'}</td></tr>
-        <tr><td>parameterGroups.內購按鈕.parameters.iapCarouselList，值為 {'defaultValue': {'value': '{\"carouselList\":[\"https://i.imgur.com/GP53XFI.png\",\"https://i.imgur.com/MX7QRqO.png\"]}'}, 'description': '圖片輪播圖，優先取url，再取壓版圖檔', 'valueType': 'JSON'}</td></tr>
-        <tr><td>parameterGroups.URL Config，值為 {'description': 'URL 相關的 Config', 'parameters': {'serverPushUrl': {'defaultValue': {'value': 'https://mobile.cmoney.tw/'}, 'description': '目前 PAGEs 沒用到，但 Android 模組會吃', 'valueType': 'STRING'}, 'vipServerUrl': {'defaultValue': {'value': 'https://mobile.cmoney.tw/'}, 'description': '目前 PAGEs 沒用到，但 Android 模組會吃', 'valueType': 'STRING'}, 'vipServerPushUrl': {'defaultValue': {'value': 'https://mobile.cmoney.tw/'}, 'description': '目前 PAGEs 沒用到，但 Android 模組會吃', 'valueType': 'STRING'}, 'serverUrl': {'defaultValue': {'value': 'https://mobile.cmoney.tw/'}, 'description': '[登入服務] Login Domain', 'valueType
+    <!-- 引入模組化的 JavaScript 檔案 -->
+    <script src="js/formatContent.js"></script>
+    <script src="js/jsonComparator.js"></script>
+    <script src="js/htmlGenerator.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
