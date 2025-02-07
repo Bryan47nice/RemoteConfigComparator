@@ -1,0 +1,14 @@
+:root {
+    /* 深色模式的基礎變數 */
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --bg-tertiary: #363636;
+    --text-primary: #e0e0e0;
+    --text-secondary: #b0b0b0;
+    --border-color: #404040;
+    --accent-color: #3498db;
+    --accent-hover: #2980b9;
+    --error-color: #e74c3c;
+    --success-color: #2ecc71;
+    --code-bg: #2b2b2b;
+}

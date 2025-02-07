@@ -1,0 +1,53 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: var(--bg-secondary);
+}
+
+th, td {
+    border: 1px solid var(--border-color);
+    padding: 12px;
+    text-align: left;
+    word-wrap: break-word;
+    max-width: 0;
+}
+
+th {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    font-weight: bold;
+}
+
+td {
+    color: var(--text-secondary);
+}
+
+/* 表格寬度設定 */
+.change-table td:nth-child(1),
+.change-table td:nth-child(2),
+.change-table td:nth-child(3) {
+    width: 13.33%;
+}
+
+.change-table td:nth-child(4),
+.change-table td:nth-child(5) {
+    width: 30%;
+}
+
+.add-delete-table td:nth-child(1),
+.add-delete-table td:nth-child(2) {
+    width: 15%;
+}
+
+.add-delete-table td:nth-child(3) {
+    width: 10%;
+}
+
+.add-delete-table td:nth-child(4) {
+    width: 25%;
+}
+
+.add-delete-table td:nth-child(5) {
+    width: 35%;
+}
