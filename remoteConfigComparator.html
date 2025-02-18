@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <title>Remote Config JSON設定檔比較工具</title>
+    <!-- 引入主要 CSS 檔案，它會匯入其他所有需要的 CSS 模組 -->
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <h1>Remote Config JSON設定檔比較工具</h1>
+    
+    <div class="upload-container">
+        <div class="file-input-group">
+            <label for="oldFile">選擇舊的JSON檔案：</label>
+            <input type="file" id="oldFile" accept=".json">
+        </div>
+        
+        <div class="file-input-group">
+            <label for="newFile">選擇新的JSON檔案：</label>
+            <input type="file" id="newFile" accept=".json">
+        </div>
+        
+        <button id="compareButton" class="compare-button" disabled>比較檔案</button>
+    </div>
+
+    <div id="results" style="display: none;">
+        <div id="fileInfo"></div>
+        <div id="changesContent"></div>
+        <div id="timestamp"></div>
+    </div>
+
+    <!-- 引入模組化的 JavaScript 檔案 -->
+    <script src="js/configComparator/formatContent.js"></script>
+    <script src="js/configComparator/jsonComparator.js"></script>
+    <script src="js/configComparator/htmlGenerator.js"></script>
+    <script src="js/configComparator/main.js"></script>
+</body>
+</html>

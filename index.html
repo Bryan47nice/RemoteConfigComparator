@@ -1,38 +1,46 @@
 <!DOCTYPE html>
-<html data-theme="dark">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>Remote Config JSON設定檔比較工具</title>
-    <!-- 引入主要 CSS 檔案，它會匯入其他所有需要的 CSS 模組 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>功能清單展示</title>
+    <!-- 引用 CSS 文件 -->
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-    <h1>Remote Config JSON設定檔比較工具</h1>
+    <div class="container-row" style="height: 100%">
+        <!-- 左側功能清單 -->
+        <aside class="sidebar">
+            <h2>功能清單</h2>
+            <ul class="menu-item">
+                <li>
+                    <button onclick="showContent('marqueeConfig.html')">行銷跑馬燈</button>
+                </li>
+                <li>
+                    <button onclick="showContent('remoteConfigComparator.html')">RemoteConfig Migrate</button>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- 右側內容展示區 -->
+        <div class="sidebar-content" style="height: 100%;">
+            <div class="container-row" >
+                <button class="icon-button" onclick="goRoot('README.md')">home</button>
+                <button class="icon-button" onclick="goBack()"><</button>
+            </div>
+            <!-- 將 main 改成 iframe -->
+            <iframe id="content-frame" style="width: 100%; height: 100%; border: none;"></iframe>
+        </div>
+    </div>
     
-    <div class="upload-container">
-        <div class="file-input-group">
-            <label for="oldFile">選擇舊的JSON檔案：</label>
-            <input type="file" id="oldFile" accept=".json">
-        </div>
-        
-        <div class="file-input-group">
-            <label for="newFile">選擇新的JSON檔案：</label>
-            <input type="file" id="newFile" accept=".json">
-        </div>
-        
-        <button id="compareButton" class="compare-button" disabled>比較檔案</button>
-    </div>
+    <!-- 引入 marked.js -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- 引入主要邏輯 -->
+    <script src="js/sidebar/navigation.js"></script>
 
-    <div id="results" style="display: none;">
-        <div id="fileInfo"></div>
-        <div id="changesContent"></div>
-        <div id="timestamp"></div>
-    </div>
-
-    <!-- 引入模組化的 JavaScript 檔案 -->
-    <script src="js/formatContent.js"></script>
-    <script src="js/jsonComparator.js"></script>
-    <script src="js/htmlGenerator.js"></script>
-    <script src="js/main.js"></script>
+    <script>
+        // 頁面載入時自動加載 marqueeConfig.html
+        window.onload = goRoot('README.md');
+    </script>
 </body>
 </html>

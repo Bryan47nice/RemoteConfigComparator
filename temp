@@ -1,0 +1,146 @@
+<script>
+       document.addEventListener('DOMContentLoaded', function () {
+        const conditionsContainer = document.getElementById('conditionsContainer');
+        const deleteWarningModal = document.getElementById('deleteWarningModal');
+
+        /**
+         * 建立條件的 DOM 元素
+         * @param {string} userType - 用戶類型
+         * @param {string} text - 文本內容
+         * @param {string} color - 顏色
+         * @param {string} startTime - 開始時間
+         * @param {string} endTime - 結束時間
+         * @param {string} url - URL
+         * @returns {HTMLElement} - 新增的條件 DOM 元素
+         */
+        function createCondition(userType = '', text = '', color = '0', startTime = '', endTime = '', url = '') {
+            const conditionDiv = document.createElement('div');
+            conditionDiv.className = 'condition';
+
+            // 設定條件的 HTML 結構
+            conditionDiv.innerHTML = `
+                <h3>
+                    <span class="condition-title"></span>
+                    <span class="condition-hint"></span> <!-- 次標題區域 -->
+                    <button type="button" class="toggle-button">︽</button> <!-- 摺疊/展開按鈕 -->
+                </h3>
+                <div class="condition-content">
+                    <label class="required" for="userType">用戶類型：</label>
+                    <select required>
+                        <option value="">請選擇</option>
+                        <option value="0" ${userType === '0' ? 'selected' : ''}>全部用戶</option>
+                        <option value="1" ${userType === '1' ? 'selected' : ''}>專業版用戶</option>
+                        <option value="2" ${userType === '2' ? 'selected' : ''}>免費版用戶</option>
+                    </select>
+
+                    <label class="required" for="text">文本內容：</label>
+                    <textarea rows="2" required>${text}</textarea>
+
+                    <label for="color">顏色 (預設白)：</label>
+                    <select>
+                        <option value="0" ${color === '0' ? 'selected' : ''}>白</option>
+                        <option value="1" ${color === '1' ? 'selected' : ''}>黑</option>
+                        <option value="2" ${color === '2' ? 'selected' : ''}>橘</option>
+                        <option value="3" ${color === '3' ? 'selected' : ''}>紅</option>
+                        <option value="4" ${color === '4' ? 'selected' : ''}>綠</option>
+                        <option value="5" ${color === '5' ? 'selected' : ''}>藍</option>
+                        <option value="6" ${color === '6' ? 'selected' : ''}>紫</option>
+                    </select>
+
+                    <label for="startTime">開始時間：</label>
+                    <input type="text" class="start-time" placeholder="YYYY/MM/DD HH:MM" value="${startTime}">
+
+                    <label for="endTime">結束時間：</label>
+                    <input type="text" class="end-time" placeholder="YYYY/MM/DD HH:MM" value="${endTime}">
+
+                    <label for="url">URL (有填寫網址才具備跳轉功能唷！)：</label>
+                    <input type="url" class="url-input" placeholder="請輸入完整的 URL" value="${url}">
+
+                    <button type="button" class="remove-button">刪除條件</button>
+                    <button type="button" class="add-before-button">向上新增</button>
+                    <button type="button" class="add-after-button">向下新增</button>
+                </div>
+            `;
+
+            // 初始化時間選擇器
+            flatpickr(conditionDiv.querySelector('.start-time'), { enableTime: true, dateFormat: "Y/m/d H:i" });
+            flatpickr(conditionDiv.querySelector('.end-time'), { enableTime: true, dateFormat: "Y/m/d H:i" });
+
+            // 綁定事件
+            bindConditionEvents(conditionDiv);
+
+            // 將條件加入容器
+            conditionsContainer.appendChild(conditionDiv);
+
+            // 更新條件編號
+            updateConditionNumbers();
+
+            return conditionDiv;
+        }
+
+        /**
+         * 綁定條件的事件
+         * @param {HTMLElement} conditionDiv - 條件的 DOM 元素
+         */
+        function bindConditionEvents(conditionDiv) {
+            const toggleButton = conditionDiv.querySelector('.toggle-button');
+            const contentDiv = conditionDiv.querySelector('.condition-content');
+            const hintSpan = conditionDiv.querySelector('.condition-hint'); // 次標題區域
+
+            // 綁定摺疊/展開按鈕事件
+            toggleButton.addEventListener('click', function () {
+                if (contentDiv.style.display === 'none') {
+                    contentDiv.style.display = 'block';
+                    toggleButton.textContent = '︽'; // 展開
+                    hintSpan.textContent = ''; // 清空次標題
+                } else {
+                    contentDiv.style.display = 'none';
+                    toggleButton.textContent = '︾'; // 摺疊
+
+                    // 更新次標題
+                    const startTimeValue = conditionDiv.querySelector('.start-time').value || '未設定';
+                    const endTimeValue = conditionDiv.querySelector('.end-time').value || '未設定';
+                    hintSpan.textContent = `${startTimeValue} ~ ${endTimeValue}`;
+                }
+            });
+
+            // 綁定刪除按鈕事件
+            conditionDiv.querySelector('.remove-button').addEventListener('click', function () {
+                if (conditionsContainer.children.length > 1) {
+                    conditionDiv.remove();
+                    updateConditionNumbers();
+                } else {
+                    deleteWarningModal.style.display = 'block';
+                }
+            });
+
+            // 綁定新增條件按鈕事件
+            conditionDiv.querySelector('.add-before-button').addEventListener('click', function () {
+                const newCondition = createCondition();
+                conditionsContainer.insertBefore(newCondition, conditionDiv);
+                updateConditionNumbers();
+            });
+
+            conditionDiv.querySelector('.add-after-button').addEventListener('click', function () {
+                const newCondition = createCondition();
+                conditionsContainer.insertBefore(newCondition, conditionDiv.nextSibling);
+                updateConditionNumbers();
+            });
+        }
+
+        /**
+         * 更新條件的編號
+         */
+        function updateConditionNumbers() {
+            const conditions = Array.from(conditionsContainer.children);
+            conditions.forEach((condition, index) => {
+                const title = condition.querySelector('.condition-title');
+                title.textContent = `條件 ${index + 1}`;
+            });
+        }
+
+        // 初始化第一個條件
+        createCondition();
+    });
+
+    </script>

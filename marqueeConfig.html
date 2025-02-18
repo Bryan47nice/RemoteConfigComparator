@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-TW" style="display: flex; flex-direction: column; height: 100%;">
+<head >
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>創建跑馬燈的 JSON 吧！</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body data-theme="dark" style="height: 100%;">
+    <header >
+        <h1 class="header">創建跑馬燈的 JSON 吧！</h1>
+        <a class="sub-header">
+            <a href="https://bryan47nice.github.io/JsonMarqueeGenerator/JsonMarqueeGeneratorInstruction.html" target="_blank">查看文件</a>
+        </a>
+    </header>
+    <div style="display: flex; flex-direction: row;gap: 10px; height: 85%;">
+        <!-- 左側面板 -->
+        <div style="flex:1; display: flex; flex-direction: column; gap: 10px; height: fit-content;max-height: 100%;">
+            <div id="conditionsContainer" style="flex:1; overflow-y:auto ;display:flex ;flex-direction: column; gap: 10px;" ></div>
+            <button id="addButton" class="icon-button" style="width: fit-content;" >＋</button>
+        </div>
+
+        <!-- 右側面板 -->
+        <div style="flex:1;overflow-y: auto; border: 1px solid var(--border-color);border-radius: 6px;">
+            <pre id="jsonOutput" class="json-output"></pre>
+        </div>
+    </div>
+    <script src="js/marqueeConfig/main.js"></script>
+    <script src="js/marqueeConfig/htmlGenerator.js"></script>
+</body>
+</html>
