@@ -1,0 +1,17 @@
+
+.condition-hint {
+    font-size: 0.9em;
+    color: var(--text-tertiary);
+    margin-left: 10px;
+    font-style: italic;
+}
+
+.textarea-hint {
+    font-size: 0.9em;
+    color: var(--text-tertiary);
+    margin-top: 5px;
+}
+
+.error {
+    border: 2px solid var(--error-color);
+}

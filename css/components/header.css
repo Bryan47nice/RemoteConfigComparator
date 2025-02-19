@@ -1,0 +1,14 @@
+
+
+.sub-header {
+    margin-top: 5px;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
