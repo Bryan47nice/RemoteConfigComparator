@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<!-- Remote Config JSON設定檔比較工具：用於比較兩份 JSON 設定檔案之間的差異 -->
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Remote Config JSON設定檔比較工具</title>
+    <!-- CSS 區域：針對頁面樣式的設置 -->
+    <style>
+        :root {
+            --bg-primary: #1a1a1a;
+            /* 預設深色模式 */
+            --bg-secondary: #2d2d2d;
+            --bg-tertiary: #363636;
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --border-color: #404040;
+            --accent-color: #3498db;
+            --accent-hover: #2980b9;
+            --error-color: #e74c3c;
+            --success-color: #2ecc71;
+            --code-bg: #2b2b2b;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9f9f9;
+            --bg-tertiary: #e7e7e7;
+            --text-primary: #000000;
+            --text-secondary: #555555;
+            --border-color: #ccc;
+            --accent-color: #28a745;
+            --accent-hover: #218838;
+            --error-color: #e74c3c;
+            --success-color: #2ecc71;
+            --code-bg: #f4f4f4;
+        }
+
+        /* 設定整個頁面的字型、外邊距及內邊距 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        /* 上傳檔案區塊的背景與內距 */
+        .upload-container {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+        }
+
+        /* 檔案輸入區塊的間距 */
+        .file-input-group {
+            margin: 10px 0;
+        }
+
+        /* 比較按鈕的樣式 */
+        .compare-button {
+            margin: 20px 0;
+            padding: 10px 20px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* 禁用（disabled）按鈕時的樣式 */
+        .compare-button:disabled {
+            background-color: var(--border-color);
+            cursor: not-allowed;
+        }
+
+        /* 表格統一設定：全寬、邊框、內距、文字對齊與自動換行 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid var(--border-color);
+            padding: 8px;
+            text-align: left;
+            word-wrap: break-word;
+            max-width: 0;
+        }
+
+        th {
+            background-color: var(--bg-tertiary);
+        }
+
+        /* 變更項目表格各欄位寬度設定 */
+        .change-table td:nth-child(1),
+        .change-table td:nth-child(2),
+        .change-table td:nth-child(3) {
+            width: 13.33%;
+        }
+
+        .change-table td:nth-child(4),
+        .change-table td:nth-child(5) {
+            width: 30%;
+        }
+
+        /* 新增/刪除項目表格各欄位寬度設定 */
+        .add-delete-table td:nth-child(1),
+        .add-delete-table td:nth-child(2) {
+            width: 15%;
+        }
+
+        .add-delete-table td:nth-child(3) {
+            width: 10%;
+        }
+
+        .add-delete-table td:nth-child(4) {
+            width: 25%;
+        }
+
+        .add-delete-table td:nth-child(5) {
+            width: 35%;
+        }
+
+        /* 程式碼區塊的樣式設定：背景色、內距、字型等 */
+        .code-block {
+            background-color: var(--code-bg);
+            padding: 10px;
+            border-radius: 4px;
+            white-space: pre;
+            font-family: monospace;
+            overflow-x: auto;
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+
+<body>
+
+    <body data-theme="dark"></body>
+    <!-- 主標題 -->
+    <h1>Remote Config JSON設定檔比較工具</h1>
+
+    <!-- 上傳檔案區域 -->
+    <div class="upload-container">
+        <!-- 舊 JSON 檔案上傳 -->
+        <div class="file-input-group">
+            <label for="oldFile">選擇舊的JSON檔案：</label>
+            <input type="file" id="oldFile" accept=".json">
+        </div>
+
+        <!-- 新 JSON 檔案上傳 -->
+        <div class="file-input-group">
+            <label for="newFile">選擇新的JSON檔案：</label>
+            <input type="file" id="newFile" accept=".json">
+        </div>
+
+        <!-- 點選此按鈕進行檔案比較，初始狀態為禁用 -->
+        <button id="compareButton" class="compare-button" disabled>比較檔案</button>
+    </div>
+
+    <!-- 結果區域：顯示檔案資訊、比較結果及執行時間，初始隱藏 -->
+    <div id="results" style="display: none;">
+        <div id="fileInfo"></div>
+        <div id="changesContent"></div>
+        <div id="timestamp" style="text-align: right; color: #666;"></div>
+    </div>
+
+    <!-- JavaScript 區域：負責實現 JSON 檔案內容比較的主要邏輯 -->
+    <script>
+        // 判斷傳入文字中是否包含程式碼的指示符號（例如大括號、陣列符等）
+        function isCode(text) {
+            const codeIndicators = [
+                '{', '}', '[', ']', ':', ','
+            ];
+            return codeIndicators.some(indicator => String(text).includes(indicator));
+        }
+
+        // 格式化內容：根據內容類型（空值、字串或物件）轉換為呈現用的 HTML
+        function formatContent(content) {
+            if (content === undefined || content === null || content === '') {
+                return '空值';
+            }
+
+            // 如果是物件型別則嘗試轉換為 JSON 格式字串再加入 code block 中
+            if (typeof content === 'object' && content !== null) {
+                try {
+                    const jsonString = JSON.stringify(content, null, 2);
+                    return jsonString === '{}' ? '空值' : `<div class="code-block">${jsonString}</div>`;
+                } catch (e) {
+                    return `<div class="code-block">${String(content)}</div>`;
+                }
+            }
+
+            // 如果是字串，嘗試解析是否為 JSON 格式
+            if (typeof content === 'string') {
+                if (content.trim() === '') return '空值';
+                try {
+                    const parsedJson = JSON.parse(content);
+                    return `<div class="code-block">${JSON.stringify(parsedJson, null, 2)}</div>`;
+                } catch (e) {
+                    if (isCode(content)) {
+                        // 去除可能的引號包圍
+                        content = String(content).trim().replace(/^["']|["']$/g, '');
+                        return `<div class="code-block">${content}</div>`;
+                    }
+                }
+            }
+
+            // 其他情況直接將內容轉為字串返回
+            return String(content);
+        }
+
+        // 比較兩個 JSON 物件，並回傳變更、增加、刪除等內容
+        function compareJson(old, new_, path = "", currentGroup = "") {
+            // 初始化變更分類物件
+            const changes = { "變更": [], "新增": [], "刪除": [] };
+
+            // 略過包含 "version" 的路徑比較
+            if (path.toLowerCase().includes("version")) {
+                return changes;
+            }
+
+            // 根據特定條件判斷欄位資料類型（valueType）
+            const getValueType = (group, parameter, defaultType) => {
+                if (group === "個股切換試用機制" &&
+                    (parameter === "sStockTrialStatus" || parameter.includes("StockTrialStatus"))) {
+                    return "value";
+                }
+                return defaultType || '';
+            };
+
+            // 解析路徑以獲取當前的 group 和 parameter 名稱
+            const pathParts = path.split('.');
+            let groupName = currentGroup;
+            let paramName = '';
+
+            // 檢查路徑中是否包含 parameters
+            const paramIndex = pathParts.indexOf('parameters');
+            if (paramIndex !== -1 && pathParts.length > paramIndex + 1) {
+                paramName = pathParts[paramIndex + 1];
+            }
+
+            // 若兩個比對的項目皆為物件，則進行遞迴比較
+            if (typeof old === 'object' && old !== null && typeof new_ === 'object' && new_ !== null) {
+                // 取出所有出現的 key
+                const allKeys = new Set([...Object.keys(old), ...Object.keys(new_)]);
+
+                for (const key of allKeys) {
+                    // 更新當前路徑
+                    const newPath = path ? `${path}.${key}` : key;
+
+                    // 更新 group 名稱
+                    if (path.includes("parameterGroups") && !currentGroup && pathParts.length > 0) {
+                        const groupIndex = pathParts.indexOf('parameterGroups');
+                        if (groupIndex !== -1 && pathParts.length > groupIndex + 1) {
+                            groupName = pathParts[groupIndex + 1];
+                        }
+                    }
+
+                    // 如果在舊資料中不存在此 key，但在新資料中存在，則視為新增項目
+                    if (!(key in old) && (key in new_)) {
+                        if (path.includes("parameters")) {
+                            changes["新增"].push({
+                                group: groupName,
+                                parameter: paramName || key,
+                                valueType: getValueType(groupName, paramName || key, new_[key].valueType),
+                                description: new_[key].description || '',
+                                value: new_[key].defaultValue ? new_[key].defaultValue.value : new_[key]
+                            });
+                        } else if (path.includes("parameterGroups") && key === "description") {
+                            changes["新增"].push({
+                                group: groupName,
+                                parameter: '',
+                                valueType: '群組描述',
+                                description: '',
+                                value: new_[key]
+                            });
+                        } else {
+                            // 遞迴檢查子層級
+                            const subChanges = compareJson({}, new_[key], newPath, groupName);
+                            for (const [changeType, entries] of Object.entries(subChanges)) {
+                                changes[changeType].push(...entries);
+                            }
+                        }
+                        continue;
+                    }
+
+                    // 如果在舊資料中存在此 key，但在新資料中不存在，則視為刪除項目
+                    if ((key in old) && !(key in new_)) {
+                        if (path.includes("parameters")) {
+                            changes["刪除"].push({
+                                group: groupName,
+                                parameter: paramName || key,
+                                valueType: getValueType(groupName, paramName || key, old[key].valueType),
+                                description: old[key].description || '',
+                                value: old[key].defaultValue ? old[key].defaultValue.value : old[key]
+                            });
+                        } else if (path.includes("parameterGroups") && key === "description") {
+                            changes["刪除"].push({
+                                group: groupName,
+                                parameter: '',
+                                valueType: '群組描述',
+                                description: '',
+                                value: old[key]
+                            });
+                        } else {
+                            // 遞迴檢查子層級
+                            const subChanges = compareJson(old[key], {}, newPath, groupName);
+                            for (const [changeType, entries] of Object.entries(subChanges)) {
+                                changes[changeType].push(...entries);
+                            }
+                        }
+                        continue;
+                    }
+
+                    // 如果同一 key 下的項目值不同，則需要紀錄此次變更
+                    if (!isEqual(old[key], new_[key])) {
+                        // 檢查是否為 defaultValue.value 的情況
+                        if (key === 'defaultValue' && old[key] && new_[key] && 'value' in old[key] && 'value' in new_[key]) {
+                            if (old[key].value !== new_[key].value) {
+                                changes["變更"].push({
+                                    group: groupName,
+                                    parameter: paramName || '',
+                                    oldValue: old[key].value,
+                                    newValue: new_[key].value,
+                                    valueType: getValueType(groupName, paramName || '')
+                                });
+                            }
+                        } else if (path.includes("parameterGroups") && key === "description") {
+                            changes["變更"].push({
+                                group: groupName,
+                                parameter: '',
+                                oldValue: old[key],
+                                newValue: new_[key],
+                                valueType: '群組描述'
+                            });
+                        } else if (typeof old[key] !== 'object' || typeof new_[key] !== 'object') {
+                            // 當其中一個值不是物件時，直接記錄變更內容
+                            changes["變更"].push({
+                                group: groupName,
+                                parameter: paramName || key,
+                                oldValue: old[key],
+                                newValue: new_[key],
+                                valueType: getValueType(groupName, paramName || key)
+                            });
+                        } else {
+                            // 當兩個值皆為物件時，遞迴檢查子層級的差異
+                            const subChanges = compareJson(old[key], new_[key], newPath, groupName);
+                            for (const [changeType, entries] of Object.entries(subChanges)) {
+                                changes[changeType].push(...entries);
+                            }
+                        }
+                    }
+                }
+            }
+            return changes;
+        }
+
+
+        // 判斷兩個項目是否完全相等：涵蓋基本型別及物件之比較
+        function isEqual(a, b) {
+            if (a === b) return true;
+            if (typeof a !== typeof b) return false;
+            if (typeof a !== 'object') return false;
+            if (Array.isArray(a) !== Array.isArray(b)) return false;
+
+            const keysA = Object.keys(a);
+            const keysB = Object.keys(b);
+
+            if (keysA.length !== keysB.length) return false;
+
+            return keysA.every(key => isEqual(a[key], b[key]));
+        }
+
+        // 根據比較結果動態生成用於展示的 HTML 表格內容
+        function generateChangesHtml(changes) {
+            let html = '';
+
+            // 建立顯示變更項目的表格 (包含原始值與新值)
+            if (changes["變更"].length > 0) {
+                html += `
+                    <h2>變更項目</h2>
+                    <table class="change-table">
+                        <thead>
+                            <tr>
+                                <th>parameterGroups</th>
+                                <th>parameters</th>
+                                <th>類別</th>
+                                <th>原本內容</th>
+                                <th>變更內容</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                changes["變更"].forEach(change => {
+                    html += `
+                        <tr>
+                            <td>${change.group || ''}</td>
+                            <td>${change.parameter || ''}</td>
+                            <td>${change.valueType || ''}</td>
+                            <td>${formatContent(change.oldValue)}</td>
+                            <td>${formatContent(change.newValue)}</td>
+                        </tr>
+                    `;
+                });
+
+                html += '</tbody></table>';
+            }
+
+            // 建立顯示新增項目的表格
+            if (changes["新增"].length > 0) {
+                html += `
+                    <h2>新增項目</h2>
+                    <table class="add-delete-table">
+                        <thead>
+                            <tr>
+                                <th>parameterGroups</th>
+                                <th>parameters</th>
+                                <th>資料類別</th>
+                                <th>描述</th>
+                                <th>新增內容</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                changes["新增"].forEach(addition => {
+                    html += `
+                        <tr>
+                            <td>${addition.group || ''}</td>
+                            <td>${addition.parameter || ''}</td>
+                            <td>${addition.valueType || ''}</td>
+                            <td>${addition.description || ''}</td>
+                            <td>${formatContent(addition.value)}</td>
+                        </tr>
+                    `;
+                });
+
+                html += '</tbody></table>';
+            }
+
+            // 建立顯示刪除項目的表格
+            if (changes["刪除"].length > 0) {
+                html += `
+                    <h2>刪除項目</h2>
+                    <table class="add-delete-table">
+                        <thead>
+                            <tr>
+                                <th>parameterGroups</th>
+                                <th>parameters</th>
+                                <th>資料類別</th>
+                                <th>描述</th>
+                                <th>刪除內容</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                changes["刪除"].forEach(deletion => {
+                    html += `
+                        <tr>
+                            <td>${deletion.group || ''}</td>
+                            <td>${deletion.parameter || ''}</td>
+                            <td>${deletion.valueType || ''}</td>
+                            <td>${deletion.description || ''}</td>
+                            <td>${formatContent(deletion.value)}</td>
+                        </tr>
+                    `;
+                });
+
+                html += '</tbody></table>';
+            }
+
+            // 若沒有發現任何差異，則提示使用者
+            if (!changes["變更"].length && !changes["新增"].length && !changes["刪除"].length) {
+                html = '<p>沒有發現任何差異。</p>';
+            }
+
+            return html;
+        }
+
+        // 取用頁面中各個元素的參照，以便後續操作
+        const oldFileInput = document.getElementById('oldFile');
+        const newFileInput = document.getElementById('newFile');
+        const compareButton = document.getElementById('compareButton');
+        const resultsDiv = document.getElementById('results');
+        const fileInfoDiv = document.getElementById('fileInfo');
+        const changesContentDiv = document.getElementById('changesContent');
+        const timestampDiv = document.getElementById('timestamp');
+
+        // 檢查是否有同時選取兩個檔案，若皆有則啟用比較按鈕
+        function checkFiles() {
+            compareButton.disabled = !(oldFileInput.files.length && newFileInput.files.length);
+        }
+
+        // 當檔案選擇狀態改變時，重新檢查
+        oldFileInput.addEventListener('change', checkFiles);
+        newFileInput.addEventListener('change', checkFiles);
+
+        // 當使用者點選比較按鈕後，進行 JSON 檔案內容的比較
+        compareButton.addEventListener('click', async () => {
+            const oldFile = oldFileInput.files[0];
+            const newFile = newFileInput.files[0];
+
+            try {
+                // 讀取並解析上傳的 JSON 檔案
+                const oldData = JSON.parse(await oldFile.text());
+                const newData = JSON.parse(await newFile.text());
+
+                // 執行比較函數
+                const changes = compareJson(oldData, newData);
+
+                // 設定檔案資訊區塊內容
+                fileInfoDiv.innerHTML = `
+                    <h3>檔案比較</h3>
+                    <p>舊檔案: ${oldFile.name}</p>
+                    <p>新檔案: ${newFile.name}</p>
+                `;
+
+                // 生成並設定比較結果的 HTML 顯示內容
+                changesContentDiv.innerHTML = generateChangesHtml(changes);
+
+                // 取得當前的日期與時間並格式化，作為執行時間顯示
+                const now = new Date();
+                const timeString = now.toLocaleString('zh-TW', {
+                    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false
+                });
+                timestampDiv.textContent = `執行時間：${timeString}`;
+
+                // 顯示結果區塊
+                resultsDiv.style.display = 'block';
+            } catch (error) {
+                // 若在檔案解析過程中出現錯誤，則跳出錯誤提示
+                alert('檔案解析錯誤：' + error.message);
+            }
+        });
+        // 主題切換功能
+        function toggleTheme() {
+            const currentTheme = document.body.getAttribute('data-theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme); // 儲存用戶偏好
+        }
+
+        // 在頁面載入時檢查用戶偏好
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.body.setAttribute('data-theme', savedTheme);
+            }
+        });
+
+        // 添加主題切換按鈕到頁面
+        const themeToggleButton = document.createElement('button');
+        themeToggleButton.textContent = '切換深淺色模式';
+        themeToggleButton.style.position = 'fixed';
+        themeToggleButton.style.top = '10px';
+        themeToggleButton.style.right = '10px';
+        themeToggleButton.style.padding = '8px 12px';
+        themeToggleButton.style.backgroundColor = 'var(--accent-color)';
+        themeToggleButton.style.color = 'white';
+        themeToggleButton.style.border = 'none';
+        themeToggleButton.style.borderRadius = '4px';
+        themeToggleButton.style.cursor = 'pointer';
+        themeToggleButton.addEventListener('click', toggleTheme);
+        document.body.appendChild(themeToggleButton);
+    </script>
+</body>
+
+</html>
